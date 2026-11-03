@@ -1,5 +1,44 @@
 # Cursus DevOps
 
+- [Cursus DevOps](#cursus-devops)
+  - [Hoofdstuk 1: De DevOps Filosofie](#hoofdstuk-1-de-devops-filosofie)
+    - [1.1 Het probleem van vroeger](#11-het-probleem-van-vroeger)
+    - [1.2 Wat is DevOps?](#12-wat-is-devops)
+    - [1.3 De DevOps Toolchain](#13-de-devops-toolchain)
+  - [Hoofdstuk 2: Versiebeheer met Git](#hoofdstuk-2-versiebeheer-met-git)
+    - [2.1 De Drie Fases van Git](#21-de-drie-fases-van-git)
+    - [2.2 Basis Commando's en Workflow](#22-basis-commandos-en-workflow)
+    - [2.3 Samenwerken (Remote Repositories)](#23-samenwerken-remote-repositories)
+    - [2.4 Navigeren en Wijzigingen Ongedaan Maken](#24-navigeren-en-wijzigingen-ongedaan-maken)
+    - [2.5 Bestanden Negeren (.gitignore \& exclude)](#25-bestanden-negeren-gitignore--exclude)
+  - [Hoofdstuk 3: Containerization (Docker)](#hoofdstuk-3-containerization-docker)
+    - [3.1 Waarom Containers? (VM's vs. Containers)](#31-waarom-containers-vms-vs-containers)
+    - [3.2 Isolatie onder de motorkap](#32-isolatie-onder-de-motorkap)
+    - [3.3 Images vs. Containers](#33-images-vs-containers)
+    - [3.4 De Dockerfile (Zelf Images Bouwen)](#34-de-dockerfile-zelf-images-bouwen)
+    - [3.5 De Docker Socket (Concept \& Beveiligingsrisico)](#35-de-docker-socket-concept--beveiligingsrisico)
+    - [3.6 Meerdere commando's uitvoeren (De `bash -c` truc)](#36-meerdere-commandos-uitvoeren-de-bash--c-truc)
+  - [Hoofdstuk 4: Praktijk \& Multi-Container Applicaties](#hoofdstuk-4-praktijk--multi-container-applicaties)
+    - [4.1 Basis Docker Commando's (CLI)](#41-basis-docker-commandos-cli)
+    - [4.2 Volumes en Data Persistentie](#42-volumes-en-data-persistentie)
+    - [4.3 Docker Compose](#43-docker-compose)
+    - [4.4 Interne DNS \& Netwerken](#44-interne-dns--netwerken)
+    - [4.5 Veilige Configuratie (.env \& Secrets)](#45-veilige-configuratie-env--secrets)
+    - [4.6 Docker Networking (Communicatie tussen containers)](#46-docker-networking-communicatie-tussen-containers)
+    - [4.7 Docker Logs (Logging \& Observability)](#47-docker-logs-logging--observability)
+  - [Hoofdstuk 5: DevContainers (Ontwikkelomgevingen)](#hoofdstuk-5-devcontainers-ontwikkelomgevingen)
+    - [5.1 Wat is een DevContainer?](#51-wat-is-een-devcontainer)
+    - [5.2 Opzet via Visual Studio Code](#52-opzet-via-visual-studio-code)
+    - [5.3 Configuratie en Automatisatie (devcontainer.json)](#53-configuratie-en-automatisatie-devcontainerjson)
+  - [Hoofdstuk 6: Reverse Proxies \& Traefik](#hoofdstuk-6-reverse-proxies--traefik)
+    - [6.1 Wat is een Reverse Proxy?](#61-wat-is-een-reverse-proxy)
+    - [6.2 Kernconcepten van Traefik](#62-kernconcepten-van-traefik)
+    - [6.3 Statische vs. Dynamische Configuratie](#63-statische-vs-dynamische-configuratie)
+    - [6.4 Traefik YAML in de Praktijk (De Configuratie Ontleed)](#64-traefik-yaml-in-de-praktijk-de-configuratie-ontleed)
+    - [6.5 TLS \& HTTPS (Beveiligd Verkeer)](#65-tls--https-beveiligd-verkeer)
+  - [Auteursrecht \& Verantwoording](#auteursrecht--verantwoording)
+<div style="page-break-after: always;"></div>
+
 ## Hoofdstuk 1: De DevOps Filosofie
 
 ### 1.1 Het probleem van vroeger
@@ -37,7 +76,7 @@ Het basisprincipe van Git steunt op drie statussen of 'fases' waarin een bestand
 * `git init`: Activeert Git en maakt een verborgen `.git`-folder aan binnen je project. Maak nooit een nieuwe Git-folder aan in een submap als de hoofdmap al een Git-folder bevat. Bij fatale fouten kun je deze folder verwijderen en de remote repository opnieuw *clonen*.
 * `git status`: Toont de huidige status van je versiebeheer. Met de `-u` vlag krijg je meer gedetailleerde informatie. Als je *'working tree clean'* ziet, zijn je lokale bestanden exact hetzelfde als de laatste opgeslagen versie.
 * `git add <filenaam>`: Verplaatst een 'untracked file' of wijziging van fase 1 naar de staging area (fase 2).
-* `git commit -m "boodschap"`: Slaat de bestanden uit de staging area definitief op in de repository (fase 3) met een beschrijvende boodschap[cite: 2, 3]. Elke commit krijgt een unieke hashcode ter identificatie en veiligheid. Hierdoor kan je heel specifiek versies bijhouden (bijvoorbeeld een versie mét en zonder een bepaalde feature, zonder halfafgewerkte code daartussenin).
+* `git commit -m "boodschap"`: Slaat de bestanden uit de staging area definitief op in de repository (fase 3) met een beschrijvende boodschap. Elke commit krijgt een unieke hashcode ter identificatie en veiligheid. Hierdoor kan je heel specifiek versies bijhouden (bijvoorbeeld een versie mét en zonder een bepaalde feature, zonder halfafgewerkte code daartussenin).
 * `git log`: Toont het logboek van alle commits met info over de auteur en datum. De meest recente commit staat bovenaan. Handige opties:
   * `--oneline`: Toont enkel de belangrijkste informatie compact.
   * `--graph`: Toont een visuele boomstructuur (handig bij vertakkingen/branches).
@@ -53,7 +92,7 @@ Git ondersteunt het werken met een lokale én een remote repository, waardoor je
 
 ### 2.4 Navigeren en Wijzigingen Ongedaan Maken
 * `git diff`: Toont de exacte verschillen tussen verschillende commits.
-* `git checkout`: Hiermee keer je terug naar een eerdere commit om zaken te controleren, zonder dat de nieuwere commits verwijderd worden (je gaat terug naar fase 1)[cite: 2, 3].
+* `git checkout`: Hiermee keer je terug naar een eerdere commit om zaken te controleren, zonder dat de nieuwere commits verwijderd worden (je gaat terug naar fase 1).
 * `git reset`: Wordt gebruikt om wijzigingen ongedaan te maken.
   * `git reset --soft HEAD^`: Maakt de tracking (commit) ongedaan, maar behoudt je gewijzigde bestanden lokaal.
   * `git reset --hard HEAD^`: Gooit ook de lokale wijzigingen in je bestanden weg en herstelt de bestanden naar de exacte staat van vóór de commit.
@@ -93,6 +132,8 @@ Hoewel containers het OS delen, mogen ze elkaars processen (of die van de host) 
 In Docker is er een strikt onderscheid tussen een Image en een Container:
 *   **Image:** Een onveranderlijk (read-only) sjabloon dat de applicatiecode, libraries en dependencies bevat. Vergelijkbaar met een **Klasse** in objectgeoriënteerd programmeren.
 *   **Container:** Een draaiende instantie van een image. Vergelijkbaar met een **Object**. Je kunt vanuit één image talloze identieke containers opstarten.
+<img src="images/overzicht_docker_gebruik.png">
+<div style="page-break-after: always;"></div>
 
 ### 3.4 De Dockerfile (Zelf Images Bouwen)
 Een `Dockerfile` is een tekstdocument met instructies om een image te bouwen. Docker leest dit bestand van boven naar onder. Om onnodige bestanden (zoals lokale `node_modules`) buiten de image te houden, gebruik je een `.dockerignore` bestand.
@@ -110,6 +151,28 @@ Een `Dockerfile` is een tekstdocument met instructies om een image te bouwen. Do
 Elke regel in een Dockerfile creëert een 'laag' (layer). Docker hergebruikt lagen die niet gewijzigd zijn om het bouwen te versnellen (caching).
 *   *Tip:* Kopieer eerst je dependency-bestanden (zoals `package.json`), doe een `RUN npm install`, en kopieer pas daarna de rest van je code (`COPY . .`). Als je dan je code wijzigt, hoeft Docker niet telkens alle packages opnieuw te downloaden.
 *   *Multistage Builds:* Je kunt in één Dockerfile meerdere `FROM` statements gebruiken. Hierdoor kun je bijvoorbeeld de zware SDK gebruiken om je code te compileren, en enkel het resulterende, lichte uitvoerbare bestand (via `COPY --from=BUILD`) meenemen naar een schone, lichte productie-image. Dit houdt je uiteindelijke image klein.
+
+### 3.5 De Docker Socket (Concept & Beveiligingsrisico)
+Wanneer je met de Docker CLI (Command Line Interface) commando's typt zoals `docker run` of `docker ps`, communiceert jouw terminal eigenlijk met de achterliggende 'Docker Daemon' (de achtergrondservice die het zware werk doet). Deze communicatie verloopt via de **Docker Socket**, een speciaal bestand dat standaard te vinden is op `/var/run/docker.sock`.
+<div style="page-break-after: always;"></div>
+
+**Waarom zou je deze socket delen met een container?**
+Sommige applicaties hebben informatie nodig over andere containers op jouw systeem. Een perfect voorbeeld hiervan is Traefik (zie Hoofdstuk 6). Traefik moet dynamisch weten wanneer er nieuwe web-containers opstarten of stoppen om de routing rules aan te passen. Door de Docker socket als een volume aan de Traefik-container te koppelen (`-v /var/run/docker.sock:/var/run/docker.sock`), geef je die container de mogelijkheid om rechtstreeks tegen de Docker Daemon van de host te praten.
+
+**Het Beveiligingsrisico (Security Warning)**
+Je mag de Docker socket **nooit zomaar meegeven in eender welke container**. Het geeft de container namelijk vergaande rechten:
+*   Een container met toegang tot de Docker socket kan API-verzoeken sturen naar de host en zo nieuwe containers opstarten, verwijderen of images downloaden.
+*   Dit kan leiden tot *Privilege Escalation*: een hacker die in zo'n container weet binnen te dringen, kan de socket gebruiken om toegang te verlenen aan de volledige lokale host. Dit staat nagenoeg gelijk aan het geven van *root-toegang* tot je machine.
+*   **Conclusie:** Koppel de Docker socket alléén aan zeer specifieke, vertrouwde containers (zoals je reverse proxy of monitoring tools) die absoluut niet zonder kunnen om te functioneren.
+
+### 3.6 Meerdere commando's uitvoeren (De `bash -c` truc)
+Wanneer je een container definieert, mag je in een Dockerfile standaard maar één `CMD` instructie gebruiken om het startcommando te bepalen. Maar wat als je applicatie vereist dat er eerst een migratie draait, en pas daarna de webserver start? 
+
+Om meerdere commando's sequentieel uit te voeren, gebruik je de `bash -c` truc. Je roept de bash-shell aan en geeft een string (tekenreeks) mee met daarin meerdere commando's, gescheiden door `&&`. 
+*   **De werking van `&&`:** Dit zorgt ervoor dat een volgend commando pas wordt uitgevoerd als het voorgaande succesvol (zonder fouten) is afgerond.
+*   **Voorbeeld:** `CMD ["bash", "-c", "npm run migrate && npm start"]`
+
+Deze techniek is ook bijzonder handig bij het instellen van DevContainers of complexe Docker Compose opstellingen waarbij meerdere initialisatiestappen nodig zijn.
 
 ---
 <div style="page-break-after: always;"></div>
@@ -170,6 +233,20 @@ Het is geen 'good practice' om omgevingsvariabelen (environment variables) met g
 *   **Gitignore:** Via de `.gitignore`-file kan dit `.env` bestand, en dus de variabelen, veilig uit versiebeheer gehouden worden.
 *   **Secrets:** Voor zeer gevoelige data kunnen ook *Secrets* gebruikt worden om gerichter kwetsbare data mee te geven. Dit werkt vergelijkbaar met volumes en netwerken en maakt de kans op het onbedoeld loggen van gevoelige gegevens nog veel kleiner.
 
+### 4.6 Docker Networking (Communicatie tussen containers)
+Containers zijn standaard sterk geïsoleerd. Om twee losse containers met elkaar te laten praten (bijvoorbeeld een webserver en een database), moeten ze zich in hetzelfde virtuele Docker-netwerk bevinden. 
+
+Hoewel Docker Compose dit netwerkbeheer volledig automatiseert, is het belangrijk om dit ook manueel via de CLI te kunnen opzetten en debuggen:
+*   `docker network create <netwerk-naam>`: Maakt een nieuw, geïsoleerd virtueel netwerk aan.
+*   `docker run --network <netwerk-naam> <image>`: Start een container en koppelt deze direct aan het gespecificeerde netwerk.
+*   `docker network inspect <netwerk-naam>`: Geeft een gedetailleerd overzicht (in JSON) van het netwerk, inclusief welke containers er momenteel mee verbonden zijn en welke interne IP-adressen ze hebben gekregen.
+
+### 4.7 Docker Logs (Logging & Observability)
+Omdat we containers in de praktijk bijna altijd op de achtergrond draaien (via de `-d` of *detached* vlag), zie je de output van je applicatie niet meer in je terminal verschijnen. Toch is het verzamelen van logs essentieel voor *observability* (het monitoren van je applicatie) en het opsporen van fouten.
+
+*   **Logs bekijken:** Met het commando `docker logs <container-naam of id>` haal je de volledige output (stdout en stderr) van een specifieke container op. Dit is je eerste redmiddel als een container onverwacht crasht of weigert te starten.
+*   **Beveiliging in logs:** Zorg ervoor dat wachtwoorden en API-keys nooit zomaar in de applicatie-output worden geprint. Dit is precies de reden waarom we werken met *Secrets* en *Environment Variables* (`.env`): ze voorkomen dat kwetsbare gegevens leesbaar en permanent in je Docker logs (of Git-geschiedenis) belanden.
+
 ---  
 <div style="page-break-after: always;"></div>
 
@@ -177,13 +254,13 @@ Het is geen 'good practice' om omgevingsvariabelen (environment variables) met g
 
 ### 5.1 Wat is een DevContainer?
 Een DevContainer is een afgesloten omgeving specifiek voor ontwikkeling. Dit is erg handig omdat het garandeert dat alle werknemers binnen een project in exact dezelfde omgeving werken met identieke software en dependencies. Het blijft in essentie een aparte Docker container, maar dan eentje waarin extra tools voor development worden geïnstalleerd.
-<img src="images/development-loop.png" width="400">
+<img src="images/development-loop.png">
 
 ### 5.2 Opzet via Visual Studio Code
 De meest courante manier om met DevContainers te werken is via VS Code.
 *   **Installatie:** Maak gebruik van de *Dev Containers* extensie (uitgegeven door Microsoft).
-*   **Configuratie:** Je maakt een `.devcontainer` folder aan met daarin een `devcontainer.json` bestand[cite: 2, 3]. Dit bestand maakt nog altijd gebruik van een achterliggende Dockerfile, maar voegt er extra JSON-regels aan toe (waarbij er soms overlap is tussen deze regels en de Dockerfile).
-*   **Opstarten:** Via de commando's in VS Code kies je voor *Reopen in Container*[cite: 2, 3].
+*   **Configuratie:** Je maakt een `.devcontainer` folder aan met daarin een `devcontainer.json` bestand. Dit bestand maakt nog altijd gebruik van een achterliggende Dockerfile, maar voegt er extra JSON-regels aan toe (waarbij er soms overlap is tussen deze regels en de Dockerfile).
+*   **Opstarten:** Via de commando's in VS Code kies je voor *Reopen in Container*.
 
 ### 5.3 Configuratie en Automatisatie (devcontainer.json)
 In het `devcontainer.json` bestand kan je de ontwikkelomgeving volledig naar je hand zetten:
@@ -223,10 +300,35 @@ Traefik maakt een strikt onderscheid tussen twee soorten configuratie:
 2.  **Dynamische configuratie:** Dit is de routing configuratie die dynamisch kan wijzigen. Binnen een Docker-omgeving doe je dit standaard door middel van **Docker labels** die je aan je applicatie-containers hangt.
 <img src="images/static-dynamic-configuration.png" width="400">
 
+### 6.4 Traefik YAML in de Praktijk (De Configuratie Ontleed)
+Om Traefik als reverse proxy voor je Docker-containers in te stellen, gebruik je een specifieke `docker-compose.yml` structuur. Laten we het voorbeeld stap voor stap ontleden:
+
+**1. De Traefik Service (`reverse-proxy`)**
+*   **`image: traefik:v3.2`**: We trekken de officiële Traefik image binnen.
+*   **`command`**: Hier definiëren we de *statische configuratie* van Traefik zelf.
+    *   `--api.insecure=true`: Zet de web UI (het Traefik-dashboard) onbeveiligd open, zodat je lokaal visueel kan volgen welke services gekoppeld zijn.
+    *   `--providers.docker`: Vertelt Traefik dat het naar Docker moet "luisteren" om nieuwe containers volautomatisch te detecteren.
+*   **`ports`**: 
+    *   `"80:80"`: Ontvangt al het standaard inkomende webverkeer.
+    *   `"8080:8080"`: Maakt het dashboard lokaal bereikbaar via poort 8080 (werkt in combinatie met de `api.insecure` flag).
+*   **`volumes`**: 
+    *   `/var/run/docker.sock:/var/run/docker.sock`: **Cruciaal!** Dit geeft Traefik toegang tot de Docker API, zodat het kan zien welke containers starten of stoppen en hun labels kan lezen. *Let op (zoals gezien in de theorie): Geef de Docker socket niet zomaar aan eender welke container, want dit kan diepe toegang verlenen aan je lokale host!*
+
+**2. Een Doel-Service (`whoami`)**
+*   **Geen poorten!** Merk op dat we bij de `whoami`-container geen `ports` definiëren. Omdat de reverse proxy (Traefik) en de service in hetzelfde Docker-netwerk zitten, praten ze intern met elkaar. De service zelf hoeft dus niet open te staan naar de buitenwereld.
+*   **`labels`**: Hier gebeurt de *dynamische configuratie*. 
+    *   `- "traefik.http.routers.whoami.rule=Host(\`whoami.localhost\`)"`: Deze regel plakt een label op de container dat Traefik kan lezen. Het zegt: *"Als er een HTTP-verzoek binnenkomt voor de specifieke domeinnaam `whoami.localhost`, stuur dit verkeer dan door naar deze container."*
+
+### 6.5 TLS & HTTPS (Beveiligd Verkeer)
+Standaard HTTP-verkeer (over poort 80) is onversleuteld en daardoor onveilig. Om het verkeer te beveiligen, gebruiken we TLS (Transport Layer Security), wat resulteert in een beveiligde HTTPS-verbinding.
+
+*   **De evolutie:** Vroeger was het instellen van HTTPS voor eigen applicaties een enorme klus, vooral omdat beveiligingscertificaten handmatig aangevraagd, geïnstalleerd en (niet te vergeten) geüpdatet moesten worden.
+*   **Moderne aanpak met Traefik:** Tegenwoordig is dit veel eenvoudiger. Traefik heeft ingebouwde mechanismen om volautomatisch certificaten (bijvoorbeeld via Let's Encrypt) aan te vragen en te vernieuwen. Je voegt simpelweg een paar extra labels toe aan je container, en Traefik regelt achter de schermen het hele proces. Hierdoor is je applicatie moeiteloos en standaard voorzien van een veilig, groen slotje.
+
 ---
 <div style="page-break-after: always;"></div>
 
-### Auteursrecht & Verantwoording
+## Auteursrecht & Verantwoording
 © 2026 Gonnissen Niels. Alle rechten voorbehouden.
 
 Deze cursus is onafhankelijk samengesteld en geschreven als studiemateriaal voor het vak DevOps. De theorie en praktijkvoorbeelden zijn gebaseerd op persoonlijke les- en labonotities, die vervolgens iteratief zijn gestructureerd, verfijnd en uitgebreid met de hulp van Google Gemini als technische co-auteur.
