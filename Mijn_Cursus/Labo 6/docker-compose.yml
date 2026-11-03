@@ -1,0 +1,37 @@
+services:
+  database:
+    image: mysql:8.0.29-debian
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: examen
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_password
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  todo-api-service:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      STORAGE: mysql
+      MYSQL_HOST: database
+      MYSQL_USER: todo_user
+      MYSQL_PWD: todo_password
+      MYSQL_DB: examen
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - todo-api-service

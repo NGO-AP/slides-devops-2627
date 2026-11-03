@@ -1,0 +1,119 @@
+/* style.css voor Markdown PDF in VS Code */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333333;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2c3e50;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    font-size: 2.2em;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    page-break-before: always; /* Zorgt voor een nieuwe pagina per hoofdstuk */
+}
+
+/* Voorkom dat de allereerste h1 een lege pagina ervoor krijgt */
+body > h1:first-child {
+    page-break-before: auto;
+}
+
+h2 {
+    font-size: 1.8em;
+    border-bottom: 1px solid #ecf0f1;
+    padding-bottom: 8px;
+    page-break-after: avoid;
+}
+
+h3 {
+    font-size: 1.4em;
+    page-break-after: avoid;
+}
+
+p, ul, ol {
+    margin-bottom: 1em;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+code {
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+    background-color: #f4f6f8;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #c7254e;
+}
+
+pre {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    page-break-inside: avoid;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #333333;
+}
+
+blockquote {
+    margin: 1.5em 0;
+    padding: 10px 20px;
+    border-left: 5px solid #3498db;
+    background-color: #f4f8fa;
+    color: #555555;
+    font-style: italic;
+    page-break-inside: avoid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5em;
+    page-break-inside: avoid;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #2c3e50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5em auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
